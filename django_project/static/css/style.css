@@ -1,0 +1,9 @@
+body {
+  background-color: #b61924;
+}
+
+#center-logo {
+  margin: 0 auto;
+  height: 200px;
+  padding-top: 50px;
+}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Hypernym lookup{% endblock %}
+{% block content %}
+<div id="particles-js">
+    <div class="row">
+        <img id="center-logo" src="{% static 'img/arlc-logo-horizontal-no-descriptor-white.png' %}">
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+particlesJS.load('particles-js', '{% static "js/particles.json" %}', function() {
+  console.log('callback - particles.js config loaded');
+});
+</script>
+{% endblock %}
