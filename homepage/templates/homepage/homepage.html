@@ -2,16 +2,51 @@
 {% load staticfiles %}
 {% block title %}Hypernym lookup{% endblock %}
 {% block content %}
-<div id="particles-js">
-    <div class="row">
-        <img id="center-logo" src="{% static 'img/arlc-logo-horizontal-no-descriptor-white.png' %}">
+<div class="row">
+    <div class="col-md-12">
+        <img id="center-logo" class="center-block" src="{% static 'img/arlc-logo-horizontal-no-descriptor-white.png' %}">
     </div>
 </div>
+
+<div class="row">
+    <form action="/" method="POST">
+        {% csrf_token %}
+        <div class="col-md-offset-2 col-md-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" id="txtSearch" name="search_keywords"/>
+                    <span class="input-group-btn">
+                        <select class="selectpicker" data-width="fit" name="lang">
+                            <option data-content='<span class="flag-icon flag-icon-us"></span> en' value="en" {% if lang == "en" %}selected{% endif %}>en</option>
+                            <option data-content='<span class="flag-icon flag-icon-it"></span> it' value="it"{% if lang == "it" %}selected{% endif %}>it</option>
+                            <option  data-content='<span class="flag-icon flag-icon-mx"></span> es' value="es"{% if lang == "es" %}selected{% endif %}>es</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit" style="margin-bottom: 10px">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if hyponym %}
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <p class="text-center answer">
+            The hypernym of <b>{{ hyponym }}</b> is: <b>{% if hypernym %}{{ hypernym }}{% else %}unknown{% endif %}</b>
+        </p>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}
 {% block scripts %}
 <script>
+$(function(){
+    $('.selectpicker').selectpicker();
+})
 particlesJS.load('particles-js', '{% static "js/particles.json" %}', function() {
   console.log('callback - particles.js config loaded');
-});
+});;
 </script>
 {% endblock %}
