@@ -6,7 +6,7 @@ from django.conf import settings
 
 import pymongo
 client = pymongo.MongoClient(settings.MONGO_CONNECTION_STRING)
-db = client.test
+db = client.hypernyms
 
 import spacy
 nlp_en = spacy.load('en')
@@ -23,7 +23,7 @@ def get_lemma(word, lang='en'):
         doc = nlp_it(unicode(word))
     else:
         raise ValueError('language {} not supported'.format(lang))
-    return doc.tokens[0].lemma_
+    return doc.lemma_
 
 
 def get_hypernym(word, lang='en'):
@@ -33,7 +33,7 @@ def get_hypernym(word, lang='en'):
         query = {
             'lemma': word,
             '$or': [
-                {'$exists': {'lang': False}},
+                {'lang': {'$exists': False}},
                 {'lang': 'en'}
             ]
         }
@@ -75,6 +75,6 @@ def hypernymy(request):
         'word': word,
         'lemma': lemma,
         'lang': lang,
-        'hypernyms': hypernyms
+        'hypernyms': list(hypernyms)
     }
     return HttpResponse(json.dumps(response))
