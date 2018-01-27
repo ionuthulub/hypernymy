@@ -19,4 +19,5 @@ from homepage import views as homepage_views
 
 urlpatterns = [
     url(r'^/?$', homepage_views.homepage),
+    url(r'^/api/hypernymy?$', homepage_views.hypernymy),
 ]
