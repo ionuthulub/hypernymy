@@ -32,10 +32,10 @@ def get_hypernym(word, lang='en'):
     if lang == 'en':
         query = {
             'lemma': word,
-            '$or': {
-                '$exists': {'lang': False},
-                'lang': 'en',
-            }
+            '$or': [
+                {'$exists': {'lang': False}},
+                {'lang': 'en'}
+            ]
         }
     else:
         query = {
@@ -45,7 +45,7 @@ def get_hypernym(word, lang='en'):
     docs = db.hypernyms.find(query)
     hypernyms = set()
     for d in docs:
-        hypernyms += set(d['hypernyms'])
+        hypernyms = hypernyms.union(set(d['hypernyms']))
     return hypernyms
 
 
@@ -57,9 +57,9 @@ def homepage(request):
     if request.method == 'POST':
         search_keyword = request.POST['search_keywords']
         lang = request.POST['lang']
-        hypernym = get_hypernym(search_keyword, lang=lang)
+        hypernyms = get_hypernym(search_keyword, lang=lang)
         context['hyponym'] = search_keyword
-        context['hypernym'] = hypernym
+        context['hypernym'] = ', '.join(hypernyms)
         context['lang'] = lang
 
     return render(request, 'homepage/homepage.html', context)
