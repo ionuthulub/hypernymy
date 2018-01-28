@@ -23,29 +23,33 @@ def get_lemma(word, lang='en'):
         doc = nlp_it(unicode(word))
     else:
         raise ValueError('language {} not supported'.format(lang))
-    return doc.lemma_
+    return [t.lemma_ for t in doc]
 
 
-def get_hypernym(word, lang='en'):
-    word = word.strip().lower()
+def get_hypernym(words, lang='en'):
+    words = [w.strip() for w in words]
 
-    if lang == 'en':
-        query = {
-            'lemma': word,
-            '$or': [
-                {'lang': {'$exists': False}},
-                {'lang': 'en'}
-            ]
-        }
-    else:
-        query = {
-            'lemma': word,
-            'lang': lang
-        }
-    docs = db.hypernyms.find(query)
     hypernyms = set()
-    for d in docs:
-        hypernyms = hypernyms.union(set(d['hypernyms']))
+
+    for word in words:
+        if lang == 'en':
+            query = {
+                'lemma': word,
+                '$or': [
+                    {'lang': {'$exists': False}},
+                    {'lang': 'en'}
+                ]
+            }
+        else:
+            query = {
+                'lemma': word,
+                'lang': lang
+            }
+        docs = db.hypernyms.find(query)
+
+        for d in docs:
+            hypernyms = hypernyms.union(set(d['hypernyms']))
+
     return hypernyms
 
 
