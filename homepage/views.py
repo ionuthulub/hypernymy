@@ -29,7 +29,7 @@ def get_lemma(word, lang='en'):
 def get_hypernym(words, lang='en'):
     words = [w.strip() for w in words]
 
-    hypernyms = set()
+    hypernyms = list()
 
     for word in words:
         if lang == 'en':
@@ -48,7 +48,9 @@ def get_hypernym(words, lang='en'):
         docs = db.hypernyms.find(query)
 
         for d in docs:
-            hypernyms = hypernyms.union(set(d['hypernyms']))
+            for h in d['hypernyms']:
+                if h not in hypernyms:
+                    hypernyms.append(h)
 
     return hypernyms
 
