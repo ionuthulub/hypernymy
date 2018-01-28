@@ -28,6 +28,7 @@ def get_lemma(word, lang='en'):
 
 def get_hypernym(words, lang='en'):
     words = [w.strip() for w in words]
+    words = reversed(words)
 
     hypernyms = list()
 
