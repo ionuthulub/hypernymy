@@ -61,7 +61,8 @@ def homepage(request):
     if request.method == 'POST':
         search_keyword = request.POST['search_keywords']
         lang = request.POST['lang']
-        hypernyms = get_hypernym(search_keyword, lang=lang)
+        lemma = get_lemma(search_keyword, lang=lang)
+        hypernyms = get_hypernym(lemma, lang=lang)
         context['hyponym'] = search_keyword
         context['hypernym'] = ', '.join(hypernyms)
         context['lang'] = lang
